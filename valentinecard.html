@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Love Surprise</title>
+    <style>
+        body {
+            background-color: #FFD1DC;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .card {
+            background: white;
+            width: 80%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            transition: opacity 1s ease-out;
+            text-align: center; /* Centering text inside the first card */
+        }
+
+        .panda {
+            width: 120px;
+            display: block;
+            margin: 0 auto;
+            animation: bounce 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-15px); }
+        }
+
+        button {
+            background: #FF4081;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            position: relative;
+            z-index: 5;
+        }
+
+        button:hover {
+            background: #D81B60;
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: red;
+            opacity: 1;
+            transform: scale(0.5);
+            animation: heartMove 3s ease-out forwards;
+        }
+
+        @keyframes heartMove {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                transform: translate(var(--randomX), var(--randomY)) scale(5);
+            }
+            100% {
+                transform: translate(var(--randomX2), var(--randomY2)) scale(10);
+                opacity: 0;
+            }
+        }
+
+        /* Message Box */
+        #finalMessage {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF4081;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 60%;
+            max-width: 400px;
+            opacity: 0;
+            animation: slideIn 1s forwards;
+            text-align: center; /* Centering text inside the message box */
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-150%, -50%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        /* Couple Pictures Section */
+        .couplePicsContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 images per row on large screens */
+            gap: 10px;
+            margin: 0 auto;
+            padding: 10px 0;
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 100vh; /* Make sure it takes full screen height */
+            height: 100vh; /* Full height for scrolling */
+            width: 100%; /* Full width */
+        }
+
+        .couplePics {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure images cover the area */
+            border-radius: 10px;
+            opacity: 0;
+            display: none;
+            animation: slideInPics 2s forwards;
+        }
+
+        @keyframes slideInPics {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Love Message Box */
+        #loveYou {
+            display: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: #FF4081;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid #FF4081;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 60%;
+            max-width: 400px;
+            opacity: 0;
+            animation: loveAnimation 2s forwards;
+            text-align: center; /* Centering text inside the love message box */
+        }
+
+        @keyframes loveAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Fullscreen responsiveness */
+        @media screen and (max-width: 768px) {
+            .couplePicsContainer {
+                grid-template-columns: repeat(2, 1fr); /* 2 images per row on medium screens */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .couplePicsContainer {
+                grid-template-columns: repeat(2, 1fr); /* 2 images per row on small screens (phones) */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="card">
+        <h1>💖 Happy Valentine's Day! 💖</h1>
+        <p>You are my favorite person! Here's a little panda just for you. 🐼💕</p>
+        
+        <!-- Panda Image -->
+        <img src="panda.png" alt="Cute Panda" class="panda">
+
+        <button onclick="startSurprise(event)">Click for a Surprise!</button>
+    </div>
+
+    <div id="finalMessage" class="messageBox">
+        You're the sweetest person ever! 💕🥰
+    </div>
+
+    <!-- Couple Pictures Container -->
+    <div class="couplePicsContainer">
+        <img src="pic1.jpg" class="couplePics" id="pic1" alt="Couple Picture 1">
+        <img src="pic2.jpg" class="couplePics" id="pic2" alt="Couple Picture 2">
+        <img src="pic3.jpg" class="couplePics" id="pic3" alt="Couple Picture 3">
+        <img src="pic4.jpg" class="couplePics" id="pic4" alt="Couple Picture 4">
+        <img src="pic5.jpg" class="couplePics" id="pic5" alt="Couple Picture 5">
+        <img src="pic6.jpg" class="couplePics" id="pic6" alt="Couple Picture 6">
+    </div>
+
+    <!-- Love Animation -->
+    <div id="loveYou">
+        Love You! 💖
+    </div>
+
+    <script>
+        function startSurprise(event) {
+            // Remove the card
+            document.getElementById('card').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('card').style.display = 'none';
+            }, 1000);
+
+            // Start the hearts animation
+            const button = event.target;
+            const rect = button.getBoundingClientRect();
+            const buttonX = rect.left + rect.width / 2;
+            const buttonY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart(buttonX, buttonY);
+                }, i * 150);
+            }
+
+            // Show the final message after the animation
+            setTimeout(() => {
+                document.getElementById('finalMessage').style.display = 'block';
+            }, 3000);
+
+            // Slide in the couple pictures after the message
+            setTimeout(() => {
+                for (let i = 1; i <= 6; i++) {
+                    document.getElementById('pic' + i).style.display = 'block';
+                }
+            }, 4000);
+
+            // Show the "Love You" animation after the pictures
+            setTimeout(() => {
+                document.getElementById('loveYou').style.display = 'block';
+            }, 7000);
+        }
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            document.body.appendChild(heart);
+
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+
+            // Random movement outward
+            const randomX = (Math.random() - 0.5) * 400 + 'px';
+            const randomY = (Math.random() - 0.5) * 400 + 'px';
+            const randomX2 = (Math.random() - 0.5) * 600 + 'px';
+            const randomY2 = (Math.random() - 0.5) * 600 + 'px';
+
+            heart.style.setProperty('--randomX', randomX);
+            heart.style.setProperty('--randomY', randomY);
+            heart.style.setProperty('--randomX2', randomX2);
+            heart.style.setProperty('--randomY2', randomY2);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
